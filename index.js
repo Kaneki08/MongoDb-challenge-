@@ -13,7 +13,7 @@ MongoClient.connect(uri, {useUnifiedTopology:true}, function(err,client){
 })
 
 app.listen(port, function(req,res){
-    console.log("listening at port: 3000 " + port)
+    console.log("listening at port:" + port)
 })
 
 
@@ -39,12 +39,16 @@ app.post('/customBlog', function (req,res){
 })
 
 
-app.get('/getBlogById', function (req,res){
+
+app.post('/findHeroByID', function(req,res){
     db.collection('blogs').findOne({
-    _id: ObjectId()
-    }, function(err,result){
-        if(err) throw err;
-        })
+        _id: req.body._id
+    })
+    db.collection('blogs').find({"_id" : ObjectId(req.body._id)}).toArray( function(error, documents){
+    if (error) throw error;
+    console.log(documents)
+    res.send(documents)
+    })
 })
 
 
